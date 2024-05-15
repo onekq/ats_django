@@ -1,0 +1,62 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Dashboard</h2>
+  <div class="dashboard-columns">
+    {% for status in statuses %}
+      <div class="column" id="{{ status|slugify }}">
+        <h3>{{ status }}</h3>
+        {% for application in applications %}
+          {% if application.status == status %}
+            <div class="application-link" id="application-{{ application.application_number }}" data-application-number="{{ application.application_number }}">
+              {{ application.job_requirement }} - {{ application.applicant }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+<!-- Include SortableJS library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const statuses = {{ statuses|safe }};
+  const csrfToken = '{{ csrf_token }}'; // Django CSRF token for AJAX requests
+
+  statuses.forEach(status => {
+    const column = document.getElementById(status.replace(/\s+/g, '-').toLowerCase());
+    new Sortable(column, {
+      group: 'applications',
+      animation: 150,
+      onEnd: function (evt) {
+        const applicationElement = evt.item;
+        const applicationNumber = applicationElement.getAttribute('data-application-number');
+        const newStatus = status;
+        
+        fetch('{% url "update_application_status" %}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+          },
+          body: JSON.stringify({
+            application_number: applicationNumber,
+            status: newStatus
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log('Status updated successfully.');
+          } else {
+            console.error('Failed to update status.');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      }
+    });
+  });
+});
+</script>
+{% endblock %}
