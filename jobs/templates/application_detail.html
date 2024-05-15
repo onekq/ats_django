@@ -1,0 +1,29 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Application Details</h1>
+
+<div>
+    <h2>Application Information</h2>
+    <p><strong>Application Number:</strong> {{ application.application_number }}</p>
+    <p><strong>Passcode:</strong> {{ application.passcode }}</p>
+    <p><strong>Status:</strong> {{ application.status }}</p>
+</div>
+
+<div>
+    <h2>Applicant Information</h2>
+    <p><strong>Name:</strong> {{ application.applicant.name }}</p>
+    <p><strong>Email:</strong> {{ application.applicant.email }}</p>
+    <p><strong>Contact Information:</strong> {{ application.applicant.contact_information }}</p>
+</div>
+
+<div>
+    <h2>Job Requirement Details</h2>
+    <p><strong>Department:</strong> {{ application.job_requirement.department }}</p>
+    <p><strong>Function:</strong> {{ application.job_requirement.function }}</p>
+    <p><strong>Rank:</strong> {{ application.job_requirement.rank }}</p>
+    <p><strong>Description:</strong> {{ application.job_requirement.description }}</p>
+</div>
+
+<a href="{% url 'dashboard' %}">Dashboard</a>
+{% endblock %}

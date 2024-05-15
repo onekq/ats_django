@@ -18,5 +18,5 @@ class JobApplicationForm(forms.ModelForm):
         fields = ['applicant', 'job_requirement']
 
 class ApplicationStatusForm(forms.Form):
-    job_req_id = forms.IntegerField()
+    job_req_id = forms.CharField()
     passcode = forms.CharField(max_length=20)

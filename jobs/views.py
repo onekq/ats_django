@@ -65,7 +65,7 @@ class ApplicationStatusView(View):
             job_req_id = form.cleaned_data['job_req_id']
             passcode = form.cleaned_data['passcode']
             try:
-                application = JobApplication.objects.get(id=job_req_id, passcode=passcode)
+                application = JobApplication.objects.get(application_number=job_req_id, passcode=passcode)
                 return render(request, 'application_detail.html', {'application': application})
             except JobApplication.DoesNotExist:
                 form.add_error(None, 'Invalid Job Req ID or Passcode')
