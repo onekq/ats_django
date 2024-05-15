@@ -1,0 +1,105 @@
+/* Navbar styles */
+nav {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.nav-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.nav-logo {
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+.nav-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.nav-menu li {
+    margin-bottom: 20px;
+}
+
+.nav-menu a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    padding: 10px;
+}
+
+.nav-menu a:hover {
+    background-color: #575757;
+}
+
+main {
+    margin-left: 200px; /* Adjust to match the width of the navbar */
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    nav {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .nav-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .nav-menu {
+        flex-direction: row;
+    }
+
+    .nav-menu li {
+        margin-bottom: 0;
+        margin-right: 20px;
+    }
+
+    main {
+        margin-left: 0;
+    }
+}
+
+/* Dashboard styles */
+.dashboard-columns {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent columns from wrapping */
+    gap: 20px; /* Adjust the gap between columns as needed */
+    overflow-x: auto; /* Add horizontal scrolling if needed */
+}
+
+.column {
+    flex: 1;
+    min-width: 200px; /* Adjust the minimum width of the columns as needed */
+}
+
+.application-link {
+    margin-bottom: 10px; /* Adjust the space between links as needed */
+}
+
+.application-link a {
+    color: blue; /* Style the links as needed */
+    text-decoration: none;
+}
+
+.application-link a:hover {
+    text-decoration: underline;
+}
