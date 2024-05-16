@@ -27,3 +27,9 @@ After applying for a job, the applicant will receive the application number and 
 To check the application progress, the applicant can visit the following URL and fill in the application number and passcode.
 
 http://ats-django.us-west-1.elasticbeanstalk.com/jobs/check_status/
+
+# Job Requirements
+
+Only superuser can add or modify job requirements. To do so, visit admin URL below, log in as superuser (username "admin"), then add or edit existing **Job requirements** under the **JOBS** section.
+
+http://ats-django.us-west-1.elasticbeanstalk.com/admin
