@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.http import JsonResponse
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
 from .forms import UserRegistrationForm, ApplicantForm, JobApplicationForm, ApplicationStatusForm
-from .models import JobRequirement, JobApplication
+from .models import JobRequirement, JobApplication, Applicant
 import random
 import string
 import json
@@ -18,6 +19,9 @@ def generate_passcode(length=8):
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'
+
+    def get_success_url(self):
+        return reverse_lazy('dashboard')
 
 class UserRegistrationView(View):
     def get(self, request):
@@ -42,10 +46,29 @@ class JobApplicationView(View):
     def post(self, request):
         form = JobApplicationForm(request.POST, request.FILES)
         if form.is_valid():
-            job_application = form.save(commit=False)
-            job_application.status = 'Application Submitted'  # Set default status on submission
-            job_application.passcode = generate_passcode()  # Generate passcode
+            email = form.cleaned_data['email']
+            name = form.cleaned_data['name']
+            resume = form.cleaned_data['resume']
+            job_requirement = form.cleaned_data['job_requirement']
+
+            applicant, created = Applicant.objects.get_or_create(email=email, defaults={'name': name, 'resume': resume})
+            if not created:
+                applicant.name = name
+                applicant.resume = resume
+                applicant.save()
+
+            if JobApplication.objects.filter(applicant=applicant, job_requirement=job_requirement).exists():
+                messages.error(request, 'You have already applied for this job.')
+                return render(request, 'apply.html', {'form': form})
+
+            job_application = JobApplication(
+                applicant=applicant,
+                job_requirement=job_requirement,
+                status='Application Submitted',
+                passcode=generate_passcode()
+            )
             job_application.save()
+
             messages.success(request, 'Application submitted successfully!')
             return redirect('application_success', pk=job_application.pk)
         return render(request, 'apply.html', {'form': form})

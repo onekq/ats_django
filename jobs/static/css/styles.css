@@ -103,3 +103,27 @@ main {
 .application-link a:hover {
     text-decoration: underline;
 }
+
+/* Message styles */
+.message-container {
+    margin: 20px 0;
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}

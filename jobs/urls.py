@@ -11,4 +11,4 @@ urlpatterns = [
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('application/<uuid:application_number>/', ApplicationDetailView.as_view(), name='application_detail'),
     path('update_application_status/', update_application_status, name='update_application_status'),
-    path('logout/', LogoutView.as_view(next_page='/login'), name='logout'),]
+    path('logout/', LogoutView.as_view(next_page='/jobs/login'), name='logout'),]

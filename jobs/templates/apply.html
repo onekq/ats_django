@@ -1,9 +1,32 @@
 {% extends "base_generic.html" %}
 {% block content %}
+  {% if messages %}
+    <div class="message-container">
+      {% for message in messages %}
+        {% if message.tags %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% else %}
+          <div class="alert">{{ message }}</div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
   <h2>Apply for Job</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div>
+      <label for="id_email">Email:</label>
+      <input type="email" name="email" required id="id_email">
+    </div>
+    <div>
+      <label for="id_name">Name:</label>
+      <input type="text" name="name" required id="id_name">
+    </div>
+    <div>
+      <label for="id_resume">Resume:</label>
+      <input type="file" name="resume" required id="id_resume">
+    </div>
+    {{ form.job_requirement.label_tag }} {{ form.job_requirement }}
     <button type="submit">Submit Application</button>
   </form>
 {% endblock %}

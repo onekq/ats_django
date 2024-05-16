@@ -4,15 +4,15 @@
         <ul class="nav-menu">
             <li><a href="{% url 'apply' %}">Apply</a></li>
             <li><a href="{% url 'check_status' %}">Check Status</a></li>
-            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
             {% if user.is_authenticated %}
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
                 <li><a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a></li>
                 <form id="logout-form" method="post" action="{% url 'logout' %}" style="display:none;">
                     {% csrf_token %}
                     <button type="submit">Logout</button>
                 </form>
             {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'login' %}">HR Login</a></li>
             {% endif %}
         </ul>
     </div>
