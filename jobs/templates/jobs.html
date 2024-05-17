@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+{% block content %}
+  <h2>Available Jobs</h2>
+  <ul>
+    {% for job in job_requirements %}
+      <li>
+        <a href="{% url 'job_detail' job.id %}">
+          {{ job.department }} - {{ job.function }} ({{ job.rank }})
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

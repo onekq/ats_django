@@ -38,18 +38,29 @@ class UserRegistrationView(View):
         print("Form errors:", form.errors)
         return render(request, 'register.html', {'form': form})
 
-class JobApplicationView(View):
+class JobListView(View):
     def get(self, request):
-        form = JobApplicationForm()
-        return render(request, 'apply.html', {'form': form})
+        job_requirements = JobRequirement.objects.all()
+        return render(request, 'jobs.html', {'job_requirements': job_requirements})
 
-    def post(self, request):
+class JobDetailView(DetailView):
+    model = JobRequirement
+    template_name = 'job_detail.html'
+    context_object_name = 'job_requirement'
+
+class JobApplicationView(View):
+    def get(self, request, job_id):
+        job_requirement = get_object_or_404(JobRequirement, id=job_id)
+        form = JobApplicationForm(initial={'job_requirement': job_requirement})
+        return render(request, 'apply.html', {'form': form, 'job_requirement': job_requirement})
+
+    def post(self, request, job_id):
+        job_requirement = get_object_or_404(JobRequirement, id=job_id)
         form = JobApplicationForm(request.POST, request.FILES)
         if form.is_valid():
             email = form.cleaned_data['email']
             name = form.cleaned_data['name']
             resume = form.cleaned_data['resume']
-            job_requirement = form.cleaned_data['job_requirement']
 
             applicant, created = Applicant.objects.get_or_create(email=email, defaults={'name': name, 'resume': resume})
             if not created:
@@ -59,7 +70,7 @@ class JobApplicationView(View):
 
             if JobApplication.objects.filter(applicant=applicant, job_requirement=job_requirement).exists():
                 messages.error(request, 'You have already applied for this job.')
-                return render(request, 'apply.html', {'form': form})
+                return render(request, 'apply.html', {'form': form, 'job_requirement': job_requirement})
 
             job_application = JobApplication(
                 applicant=applicant,
@@ -71,7 +82,7 @@ class JobApplicationView(View):
 
             messages.success(request, 'Application submitted successfully!')
             return redirect('application_success', pk=job_application.pk)
-        return render(request, 'apply.html', {'form': form})
+        return render(request, 'apply.html', {'form': form, 'job_requirement': job_requirement})
 
 def application_success(request, pk):
     job_application = get_object_or_404(JobApplication, pk=pk)

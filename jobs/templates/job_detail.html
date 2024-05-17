@@ -1,0 +1,6 @@
+{% extends "base_generic.html" %}
+{% block content %}
+  <h2>{{ job_requirement.department }} - {{ job_requirement.function }} ({{ job_requirement.rank }})</h2>
+  <p>{{ job_requirement.description }}</p>
+  <a href="{% url 'apply_for_job' job_requirement.id %}" class="btn btn-primary">Apply</a>
+{% endblock %}

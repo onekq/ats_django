@@ -11,7 +11,7 @@
       {% endfor %}
     </div>
   {% endif %}
-  <h2>Apply for Job</h2>
+  <h2>Apply for {{ job_requirement.department }} - {{ job_requirement.function }} ({{ job_requirement.rank }})</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div>
@@ -26,7 +26,7 @@
       <label for="id_resume">Resume:</label>
       <input type="file" name="resume" required id="id_resume">
     </div>
-    {{ form.job_requirement.label_tag }} {{ form.job_requirement }}
+    <input type="hidden" name="job_requirement" value="{{ job_requirement.id }}">
     <button type="submit">Submit Application</button>
   </form>
 {% endblock %}
