@@ -28,3 +28,8 @@ class JobApplicationForm(forms.ModelForm):
 class ApplicationStatusForm(forms.Form):
     job_req_id = forms.CharField()
     passcode = forms.CharField(max_length=20)
+
+class JobRequirementForm(forms.ModelForm):
+    class Meta:
+        model = JobRequirement
+        fields = ['department', 'function', 'rank', 'description']

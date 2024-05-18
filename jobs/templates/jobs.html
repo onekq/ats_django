@@ -7,7 +7,13 @@
         <a href="{% url 'job_detail' job.id %}">
           {{ job.department }} - {{ job.function }} ({{ job.rank }})
         </a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'edit_job' job.id %}" class="btn btn-secondary">Edit</a>
+        {% endif %}
       </li>
     {% endfor %}
   </ul>
+  {% if user.is_authenticated %}
+    <a href="{% url 'create_job' %}" class="btn btn-primary">Create New Job</a>
+  {% endif %}
 {% endblock %}

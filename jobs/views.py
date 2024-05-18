@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.http import JsonResponse
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
 from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
-from .forms import UserRegistrationForm, ApplicantForm, JobApplicationForm, ApplicationStatusForm
+from .forms import UserRegistrationForm, JobApplicationForm, ApplicationStatusForm, JobRequirementForm
 from .models import JobRequirement, JobApplication, Applicant
 import random
 import string
@@ -16,6 +17,9 @@ import json
 def generate_passcode(length=8):
     characters = string.ascii_letters + string.digits
     return ''.join(random.choice(characters) for i in range(length))
+
+def home_redirect(request):
+    return redirect('jobs')
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'
@@ -84,6 +88,34 @@ class JobApplicationView(View):
             return redirect('application_success', pk=job_application.pk)
         return render(request, 'apply.html', {'form': form, 'job_requirement': job_requirement})
 
+class CreateJobView(View):
+    def get(self, request):
+        form = JobRequirementForm()
+        return render(request, 'create_job.html', {'form': form})
+
+    def post(self, request):
+        form = JobRequirementForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Job created successfully!')
+            return redirect('jobs')
+        return render(request, 'create_job.html', {'form': form})
+
+class EditJobView(View):
+    def get(self, request, job_id):
+        job = get_object_or_404(JobRequirement, id=job_id)
+        form = JobRequirementForm(instance=job)
+        return render(request, 'edit_job.html', {'form': form, 'job': job})
+
+    def post(self, request, job_id):
+        job = get_object_or_404(JobRequirement, id=job_id)
+        form = JobRequirementForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Job updated successfully!')
+            return redirect('jobs')
+        return render(request, 'edit_job.html', {'form': form, 'job': job})
+    
 def application_success(request, pk):
     job_application = get_object_or_404(JobApplication, pk=pk)
     return render(request, 'application_success.html', {'job_application': job_application})
