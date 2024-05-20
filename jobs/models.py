@@ -54,3 +54,12 @@ class JobApplication(models.Model):
         
     class Meta:
         unique_together = ('applicant', 'job_requirement')
+
+class AuditLog(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    resource_name = models.CharField(max_length=100)
+    action = models.CharField(max_length=10)
+    payload = models.JSONField()
+
+    def __str__(self):
+        return f"{self.timestamp} - {self.resource_name} - {self.action}"

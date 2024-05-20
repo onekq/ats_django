@@ -1,8 +1,9 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
-from .views import CustomLoginView, UserRegistrationView, JobListView, JobDetailView
-from .views import JobApplicationView, ApplicationStatusView, ApplicationDetailView, DashboardView, CreateJobView, EditJobView
-from .views import application_success, update_application_status, home_redirect
+from .views_auth import CustomLoginView, UserRegistrationView
+from .views_jobs import home_redirect, JobListView, JobDetailView, CreateJobView, EditJobView
+from .views_hr import DashboardView, update_application_status, audit_log_view
+from .views_applications import ApplicationStatusView, ApplicationDetailView, JobApplicationView, application_success
 
 urlpatterns = [
     path('', home_redirect, name='home'), 
@@ -18,5 +19,6 @@ urlpatterns = [
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('application/<uuid:application_number>/', ApplicationDetailView.as_view(), name='application_detail'),
     path('update_application_status/', update_application_status, name='update_application_status'),
+    path('audit_log/', audit_log_view, name='audit_log'),
     path('logout/', LogoutView.as_view(next_page='/jobs/login'), name='logout'),
 ]
